@@ -2,10 +2,10 @@ from django.shortcuts import render
 from .models import Profile
 import requests
 from django.contrib.auth.decorators import login_required
-
+from decouple import config
 
 def GetNews(catigory):
-    api_key='10f52cca4c424851ae09f32027b3b908'
+    api_key=config('NEWS_API_KEY')
     base_url_articals='https://newsapi.org/v2/everything'
     base_url_top_news='https://newsapi.org/v2/top-headlines'
 
@@ -38,6 +38,7 @@ def GetNews(catigory):
 
     else:
         print('faild to load content 1')
+        print(response.status_code)
     
     if response2.status_code ==200:
         data=response2.json()
@@ -55,6 +56,8 @@ def GetNews(catigory):
                 top_news_list.append(the_news)
     else:
         print('faild to load content 2')
+        print(response2.status_code)
+
 
 
     return news_list,top_news_list
@@ -63,7 +66,7 @@ def GetWeather(profile):
     current_url= "http://api.weatherapi.com/v1/current.json"
     forecast_url = "http://api.weatherapi.com/v1/forecast.json"
 
-    api_key = "ab2af2712b7a4f3b82b175311241112"
+    api_key = config('WEATHER_API_KEY')
     city=profile.City
     
     params={'key':api_key ,  'q':f"{city}"}
