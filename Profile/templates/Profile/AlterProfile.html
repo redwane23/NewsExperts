@@ -1,0 +1,96 @@
+{% load static %}  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="{% static 'Profile/css/AlterProfile.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        <div class="upper-section">
+            <p class='upper-text'> EDIT PROFILE </p>
+        </div>
+        <div class="input-section"> 
+            {% csrf_token %}
+            {{ from.as_p }}
+            <button type="submit"> done </button>
+        </div>
+    </form>
+    <button type="button" class="btnGetLoc" id="btnGetLoc"> Find My Location </button>
+    <div id="map" style=" height:450px; border:3px solid black"></div>
+</body>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+        try {
+        var map = L.map('map').setView([0, 0], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap',
+            geolocate: true,
+        }).on('tileerror', function (e) {
+            console.error("Tile error:", e);
+        }).addTo(map);
+    } catch (e) {
+        console.error("Map initialization error:", e);
+    }
+    map.on('click',function (e) {
+    var lat =e.latlng.lat;
+    var lng =e.latlng.lng;
+
+    const data = {
+    'lat': lat,
+    'lng': lng,
+    };
+
+    const requestOptions = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    };
+    fetch('/api/get-city/'+lat+'/'+lng+'/', requestOptions)
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('id_City').value=data.city
+    })
+    .catch(error => {
+        console.error
+
+    ('Error:', error);
+    });
+
+})
+
+L.DomEvent.on(document.getElementById('btnGetLoc'), 'click', function(){
+    map.locate({setView: true, maxZoom: 16});
+  })
+
+  function onLocationFound(e) {
+    var radius = e.accuracy;
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+}
+
+map.on('locationfound', onLocationFound);
+
+
+});
+
+
+</script>
+</html>

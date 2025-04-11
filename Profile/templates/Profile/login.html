@@ -1,0 +1,25 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'Profile/css/login.css' %}">
+    <title>login</title>
+</head>
+<body>
+    <form method="POST">
+        <div class="upper-section">
+            <p class="upper-text"> LOGIN</p>
+        </div>
+        <div class="input-section">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type=" submin">login </button>
+        </div>
+
+
+    </form>
+</body>
+</html>
