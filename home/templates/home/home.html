@@ -37,7 +37,7 @@
                             <li>
                                 <form method="post" action="/home/news/" class="navbar-form">
                                     {% csrf_token%}
-                                    <div class="form-group">
+                                    <div class="form-group" >
                                         <div class="input-group">
                                             <input type="search" name="search_term"  placeholder="Search Anything Here..." class="form-control">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
@@ -126,22 +126,16 @@
                     </ul>
                 </div>
             </div>
-                {% for new in news %}
-                <div class="articale">
-                    <img src="{{ new.image }}" class="news-image">
-                    <div>
-                        <a href="{{new.url}}" class="news-title"> {{new.headline}}</a> 
-                        <p class="news-summary"> {{new.text}} </p>
-                        <p class="pub-date">{{ new.pub_date }}</p>
-                    </div>
+            <div class="headlines">
+            </div>
 
-                </div>
-                {%endfor%}
-            <p class="source"> {{news.}}</p>
+                <center><button class="load-more"> Load More </button> </center>
+
+            <p class="source"> {{news.source}}</p>
         </div>
         <div class="event-section">
             <div class="top-event-section"><h1>TOP NEWS</h1></div>
-            {% for new in top_news_list %}
+            {% for new in top_news %}
             <div class="top-news">
                 <img src="{{ new.image}}" class="top-news-image">
                 <div>
@@ -156,6 +150,54 @@
     </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+
+    $page=1;
+
+
+    get_news();
+    
+    document.querySelector('.load-more').addEventListener('click', get_news);
+
+    function get_news() {
+        $page += 1;
+        fetch('http://127.0.0.1:8000/home/get_news/?page=' + $page, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}',
+    },
+})
+.then((response) => {
+    console.log('Response:', response);
+    return response.json(); // Return the parsed JSON data
+})
+.then((data) => {
+    console.log('Response from server:', data);
+    const headlines = document.querySelector('.headlines');
+    data.serialized_news.forEach((new_item) => {
+        const article = document.createElement('div');
+        article.className = 'articale';
+        article.innerHTML = `
+            <img src="${new_item.image}" class="news-image">
+            <div>
+                <a href="${new_item.url}" class="news-title">${new_item.headline}</a>
+                <p class="news-summary">${new_item.text}</p>
+                <p class="pub-date">${new_item.pub_date}</p>
+            </div>
+        `;
+        headlines.appendChild(article);
+    });
+})
+.catch((error) => {
+    console.error('Error:', error);
+});
+        console.log("Load more news clicked");
+    }
+
+
+    
+</script>
 </body>
 </html>
 

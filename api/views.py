@@ -1,5 +1,3 @@
-from lib2to3.pgen2 import driver
-import re
 from rest_framework import generics
 from Profile.models import TaskList,Task
 from .serializers import TaskListSerializers,TaskSerializers
@@ -8,8 +6,6 @@ import math
 from geopy.distance import geodesic
 from cities_light.models import City
 from django.http import JsonResponse
-from bs4 import BeautifulSoup
-import requests
 
 
 class TaskListView(generics.ListAPIView):

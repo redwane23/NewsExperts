@@ -3,24 +3,35 @@ from .models import Profile
 import requests
 from django.contrib.auth.decorators import login_required
 from decouple import config
+import datetime
+from rest_framework.views import APIView
+from django.shortcuts import render
+from rest_framework.pagination import PageNumberPagination
+from django.http import JsonResponse
+from .serialiezer import NewsSerializer, TopNewsSerializer , profileSerializer, userSerializer
 
-def GetNews(catigory):
+
+
+
+def GetNews(catigory,search_date):
+
     api_key=config('NEWS_API_KEY')
     base_url_articals='https://newsapi.org/v2/everything'
-    base_url_top_news='https://newsapi.org/v2/top-headlines'
 
-    params={'q': catigory,'from':'2025-01-01','sortBy':'popularity',"apiKey":api_key}
-    params2={
-        'country':'us',
-        'apiKey':api_key
-    }
+    if search_date == 'yesterday':
+        date=datetime.date.today() - datetime.timedelta(days=1)
+    elif search_date == 'last week':
+        date=datetime.date.today() - datetime.timedelta(days=7) 
+    elif search_date == 'last mounth':
+        date=datetime.date.today() - datetime.timedelta(days=30)
+
+    params={'q': catigory,'from':date,'sortBy':'popularity',"apiKey":api_key}
+
 
     response=requests.get(base_url_articals,params=params)
-    response2=requests.get(base_url_top_news,params=params2)
+
 
     news_list=[]
-    top_news_list=[]
-
     if response.status_code ==200:
         data=response.json()
         for  artical in data['articles']:
@@ -39,9 +50,21 @@ def GetNews(catigory):
     else:
         print('faild to load content 1')
         print(response.status_code)
+
+    return news_list
     
-    if response2.status_code ==200:
-        data=response2.json()
+def GetTopNews():
+    base_url_top_news='https://newsapi.org/v2/top-headlines'
+    api_key=config('NEWS_API_KEY')
+    params={
+        'country':'us',
+        'apiKey':api_key
+    }
+    response=requests.get(base_url_top_news,params=params)
+    top_news_list=[]
+
+    if response.status_code ==200:
+        data=response.json()
         for  artical in data['articles']:
             image = artical.get('urlToImage')
             url = artical.get('url')
@@ -56,11 +79,11 @@ def GetNews(catigory):
                 top_news_list.append(the_news)
     else:
         print('faild to load content 2')
-        print(response2.status_code)
+        print(response.status_code)
 
+    
 
-
-    return news_list,top_news_list
+    return top_news_list
 
 def GetWeather(profile):
     current_url= "http://api.weatherapi.com/v1/current.json"
@@ -105,23 +128,61 @@ def GetWeather(profile):
 
     return weather
 
-@login_required
-def home(request,catigory):
-    user=request.user
-    profile=Profile.objects.get(User=user)
 
-    if request.method=='POST':
-        search_term=request.POST.get("search_term")
-        news,top_news_list=GetNews(search_term)
-    else:
-        news,top_news_list=GetNews(catigory)
-    weather=GetWeather(profile)
+class home(APIView):
+    template_name = 'home/home.html'
+    
+    def get_context(self):
+        user=self.request.user
+        profile=Profile.objects.get(User=user)
 
-    context={
-        'user':user,
-        'profile':profile,
-        'news':news,
-        'top_news_list':top_news_list,
-        'weather':weather,
-    }
-    return render(request,'home/home.html',context)
+        return {
+            'user':user,
+            'profile':profile,
+            'weather':GetWeather(profile),
+            'top_news':GetTopNews(),
+        }
+    
+    def get(self, request):
+        context = self.get_context()
+        return render(request, self.template_name, context)
+    
+
+class get_news(APIView):
+    def paginate_news(self, request, news_list):
+        paginator = PageNumberPagination()
+        paginator.page_size = 15  
+        page = paginator.paginate_queryset(news_list, request)
+        return page
+    
+    def get_context(self,request,search_term=None):
+        profile=Profile.objects.filter(User=self.request.user).first()
+        if search_term:
+            news=GetNews(search_term,profile.date_of_search)
+        else:
+            news=GetNews('world',profile.date_of_search)
+        paginated_news = self.paginate_news(request,news)
+
+        serialized_news=NewsSerializer(paginated_news,many=True).data
+        return {
+            "serialized_news":serialized_news,
+        }
+    
+    def get(self,request):
+        data=self.get_context(request)
+        return JsonResponse(data)
+        
+        
+    def post(self,request):
+        search_term = request.POST.get('search_term')
+        data=self.get_context(request,search_term)
+        return JsonResponse(data)
+
+
+
+
+
+        
+
+
+
