@@ -4,17 +4,9 @@ whitenoise
 gunicorn
 
 
-
-
-
-soupsieve==2.4.1
-sqlparse==0.4.4
-trio==0.22.2
-trio-websocket==0.11.1
-typing-extensions==4.7.1
-Unidecode==1.3.8
-urllib3==2.0.7
-uvicorn==0.22.0
-whitenoise==5.3.0
-wsproto==1.2.0
-zipp==3.15.0
+pytz==2024.2
+pyuca==1.2
+requests==2.31.0
+selenium==4.11.2
+sniffio==1.3.1
+sortedcontainers==2.4.0
