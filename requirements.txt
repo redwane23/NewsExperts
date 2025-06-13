@@ -6,8 +6,6 @@ gunicorn
 
 
 
-
-
-PySocks==1.7.1
-python-decouple==3.8
-python-utils==3.5.2
+packaging==24.0
+Pillow==9.5.0
+progressbar2==4.2.0
