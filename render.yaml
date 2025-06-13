@@ -1,0 +1,22 @@
+databases:
+  - name: NewsExpertsDB
+    plan: free
+    databaseName: newsexperts
+    user: redwane
+
+services:
+  - type: web
+    plan: free
+    name: NewsExperts
+    runtime: python
+    buildCommand: './build.sh'
+    startCommand: 'python -m gunicorn newsexperts.asgi:application -k uvicorn.workers.UvicornWorker'
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: NewsExpertsDB
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
