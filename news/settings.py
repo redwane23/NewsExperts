@@ -115,10 +115,10 @@ LOGIN_REDIRECT_URL='profile'
 LOGOUT_REDIRECT_URL='/profile/login'
 LOGIN_URL = '/profile/login/'
 
-if not DEBUG:
 
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
