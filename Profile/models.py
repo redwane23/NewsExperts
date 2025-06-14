@@ -35,8 +35,13 @@ class Task(models.Model):
     def __str__(self):
         return f"{self.text[0:15]}..." 
 
+def get_default_country():
+    try:
+        return Country.objects.first().id
+    except:
+        return None
 
-default_country=Country.objects.first().id
+default_country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, default=get_default_country)
 class CountryList(models.Model):
     owner=models.OneToOneField(User,on_delete=models.CASCADE,null=True)
     country_1=models.ForeignKey(Country,on_delete=models.CASCADE,related_name='country_1',default=default_country)
