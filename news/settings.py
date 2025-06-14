@@ -118,7 +118,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Used only for collected static files
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles'),  # Folder where your static files live during dev
+    os.path.join(BASE_DIR, 'static'),  # Folder where your static files live during dev
 ]
 
 
