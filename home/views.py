@@ -88,43 +88,45 @@ def GetTopNews():
 def GetWeather(profile):
     current_url= "http://api.weatherapi.com/v1/current.json"
     forecast_url = "http://api.weatherapi.com/v1/forecast.json"
-
+    weather={}
     api_key = config('WEATHER_API_KEY')
-    city=profile.City.name if profile.City else 'London'  # Default to London if no city is set
-    
-    params={'key':api_key ,  'q':f"{city}"}
-    params2={'key':api_key ,  'q':f"{city}",'days':1}
+    if profile:
+      if profile.city:
+        city=profile.city.name if profile.City else 'London'  # Default to London if no city is set
+        
+        params={'key':api_key ,  'q':f"{city}"}
+        params2={'key':api_key ,  'q':f"{city}",'days':1}
 
-    response=requests.get(current_url, params=params)
-    response2=requests.get(forecast_url,params=params2 )
+        response=requests.get(current_url, params=params)
+        response2=requests.get(forecast_url,params=params2 )
 
-    current={}
-    forecast={}
+        current={}
+        forecast={}
 
-    if response.status_code ==200:
-        data=response.json()
+        if response.status_code ==200:
+            data=response.json()
 
-        current={
-            'tempeture':data['current']['temp_c'],
-            'description':data['current']['condition']['text'],
-            'wind_kph':data['current']['wind_kph'],
-            'humidity':data['current']['humidity'],
-            'icon':data['current']['condition']['icon'],
-            'location':data['location']["region"]
+            current={
+                'tempeture':data['current']['temp_c'],
+                'description':data['current']['condition']['text'],
+                'wind_kph':data['current']['wind_kph'],
+                'humidity':data['current']['humidity'],
+                'icon':data['current']['condition']['icon'],
+                'location':data['location']["region"]
+            }
+
+        if response2.status_code == 200:
+            data2=response2.json()
+            forecast={
+                'max_temp':data2['forecast']['forecastday'][0]['day']['maxtemp_c'],
+                'min_temp':data2['forecast']['forecastday'][0]['day']['mintemp_c'],
+                'avg_temp':data2['forecast']['forecastday'][0]['day']['avgtemp_c'],
+                'humidity':data2['forecast']['forecastday'][0]['day']['avghumidity'],
+                'rain':data2['forecast']['forecastday'][0]['day']['daily_will_it_rain'],
+                'description':data2['forecast']['forecastday'][0]['day']['condition']['text'],
+                'icon':data2['forecast']['forecastday'][0]['day']['condition']['icon'],
         }
-
-    if response2.status_code == 200:
-        data2=response2.json()
-        forecast={
-            'max_temp':data2['forecast']['forecastday'][0]['day']['maxtemp_c'],
-            'min_temp':data2['forecast']['forecastday'][0]['day']['mintemp_c'],
-            'avg_temp':data2['forecast']['forecastday'][0]['day']['avgtemp_c'],
-            'humidity':data2['forecast']['forecastday'][0]['day']['avghumidity'],
-            'rain':data2['forecast']['forecastday'][0]['day']['daily_will_it_rain'],
-            'description':data2['forecast']['forecastday'][0]['day']['condition']['text'],
-            'icon':data2['forecast']['forecastday'][0]['day']['condition']['icon'],
-    }
-    weather={'current':current,'forecast':forecast}
+        weather={'current':current,'forecast':forecast}
 
     return weather
 

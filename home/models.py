@@ -16,8 +16,8 @@ class Profile(models.Model):
 
 
 
-    User=models.ForeignKey(User,on_delete=models.CASCADE)
-    City=models.ForeignKey(City,on_delete=models.SET_NULL,null=True,blank=True)
+    User=models.ForeignKey(User,on_delete=models.CASCADE,related_name='profile')
+    City=models.ForeignKey(City,on_delete=models.SET_NULL,null=True,blank=True,related_name='city')
     FirstName=models.CharField(max_length=100 ,blank=True)
     LastName=models.CharField(max_length=100 ,blank=True)
     Email=models.EmailField(blank=True)
