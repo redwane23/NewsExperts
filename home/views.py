@@ -90,7 +90,7 @@ def GetWeather(profile):
     forecast_url = "http://api.weatherapi.com/v1/forecast.json"
 
     api_key = config('WEATHER_API_KEY')
-    city=profile.City
+    city=profile.City.name if profile.City else 'London'  # Default to London if no city is set
     
     params={'key':api_key ,  'q':f"{city}"}
     params2={'key':api_key ,  'q':f"{city}",'days':1}
