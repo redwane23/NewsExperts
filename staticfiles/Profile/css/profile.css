@@ -1,0 +1,233 @@
+body{
+  background-color: whitesmoke !important;
+}
+.profile-section{
+    display:flex;
+    margin: 5vh 15vw;
+    justify-content: space-around;
+    background-color: palegreen;
+  }
+
+.profile_picture{
+    width: 60px;
+    height: 60px;
+    margin:10px 0;
+    border:1px solid;
+}
+.alter-button{
+    height: 30%;
+    margin-top: 10px;
+    background-color: #5ad2ca;
+    text-decoration: none;
+    border: 1px solid black;
+    color: rgb(39, 39, 84);
+    padding: 5px 10px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+.alter-button:hover{
+    color: rgb(39, 39, 84);
+}
+.to-do-list{
+    margin: 5vh 15vw;
+    justify-content: space-around;
+    border: 1px solid;
+    border-radius: 5px;
+}
+.heading{
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+    background-color: orange;
+    border-bottom: 1px solid;
+    margin:0;
+    padding: 10px 0;
+}
+.task{
+    padding: 10px 0;
+    padding-right: 15px;
+    border-bottom: 1px solid;
+    padding-left: 15px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.open-button,.reset-button {
+    background-color: rgb(255, 166, 0);
+    color: white;
+    padding: 9px ;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 15px 5px;
+    width: 200px;
+  }
+  .reset-button{
+      background-color: orangered;
+  }
+  
+  /* The popup form - hidden by default */
+  .form-popup {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 30px;
+    border: 3px solid black;
+    z-index: 9;
+  }
+  
+  /* Add styles to the form container */
+  .form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+  }
+  
+  /* Full-width input fields */
+  .form-container input[type=text], .form-container input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+  
+  /* When the inputs get focus, do something */
+  .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+  
+  /* Set a style for the submit/login button */
+  .form-container .btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+  }
+  
+  /* Add a red background color to the cancel button */
+  .form-container .cancel {
+    background-color: red;
+  }
+  
+  /* Add some hover effects to buttons */
+  .form-container .btn:hover, .open-button:hover {
+    opacity: 1;
+  }
+  .hight,.medium,.low{
+    border-radius: 50%;
+    border: 1px solid;
+    width:20px;
+    height: 20px;
+    margin-right: 5px;
+  }
+  .hight{
+    background-color: red;
+  }
+  .medium{
+    background-color: orange;
+  }
+  .low{
+    background-color: green;
+  }
+  #map {
+    height: 350px;
+    width: 30vw;
+    border: 3px solid black;
+    background-color: green;
+    margin: 0 35vw;
+    }
+
+
+
+    .main {
+      display: flex;
+      padding: 10px;
+      height: 230px;
+      margin:0 20%;
+      border: 1px solid;
+      border-radius: 14px;
+      margin-bottom: 5vh;
+  }
+  
+  .clockbox,
+  #clock {
+      width:110px;
+      height: 110px;
+      border-radius: 50%;
+      margin: 0 20px;
+      
+  }
+  #clock{
+    background-color: black;
+  }
+  
+  .mid-circle {
+    stroke:white;
+  }
+
+  .hour-marks {
+      stroke:white;
+      stroke-width: 9;
+      stroke-miterlimit: 10;
+  }
+  
+  .hour-arm {
+      stroke:white;
+      stroke-width: 17;
+      stroke-miterlimit: 10;
+  }
+  
+  .minute-arm {
+      stroke:white;
+      stroke-width: 11;
+      stroke-miterlimit: 10;
+  }
+  
+  .second-arm {
+
+      stroke:red;
+      stroke-width: 4;
+      stroke-miterlimit: 10;
+  }
+  
+  .sizing-box {
+      fill: none;
+  }
+  
+  /* Make all arms rotate around the same center point. */
+  /* Optional: Use transition for animation. */
+  #hour,
+  #minute,
+  #second {
+      transform-origin: 300px 300px;
+      transition: transform .5s ease-in-out;
+  }
+
+  
+    a{
+      color: black !important;
+  }
+    .row{
+      background-color: orange !important;
+      padding-left: 0 !important;
+  }
+  .navbar-brand{
+      background-color: black !important;
+      color:white !important;
+  }
+  .navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover{
+      color: white !important;   
+  }
+  
+  
+
+
