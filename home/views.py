@@ -134,7 +134,7 @@ class home(APIView):
     
     def get_context(self):
         user=self.request.user
-        profile=Profile.objects.get(User=user)
+        profile=Profile.objects.filter(User=user).first()
 
         return {
             'user':user,

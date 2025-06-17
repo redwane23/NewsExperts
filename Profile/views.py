@@ -12,8 +12,8 @@ from django.contrib.auth.decorators import login_required
 def ProfileView(request):
     user=request.user
     profile=Profile.objects.filter(User=user).first()
-    task_list=TaskList.objects.get(owner=user)
-    countrylist=CountryList.objects.get(owner=user)
+    task_list=TaskList.objects.filter(owner=user).first()
+    countrylist=CountryList.objects.filter(owner=user).first()
     tasks=Task.objects.filter(list=task_list).annotate(
         preiority_order=Case(
             When(Preiorety='H', then=1),
