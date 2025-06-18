@@ -66,8 +66,11 @@
     </div>
     
     <div class="profile-section"> 
-
-        <img src="{{ profile.Picture.url }}" class="profile_picture">
+        {%if profile.Picture %}
+            <img src="{{ profile.Picture.url }}" class="profile_picture">
+        {% else %}
+            <img src="{% static 'Profile/images/default.png' %}" class="profile_picture">
+        {% endif %}
         <div style="z-index: 1; font-weight: bolder; margin-top: 5px;">
             <p > name : {{user}}</p>
             {%if profile.City  %}

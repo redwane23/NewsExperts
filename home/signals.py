@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 
 @receiver(post_save,sender=User)
 def my_callback(sender,instance,created ,**kwargs):
+    print(instance)
     if created:
         Profile.objects.create(
             user=instance,

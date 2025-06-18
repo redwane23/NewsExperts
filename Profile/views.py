@@ -10,8 +10,13 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def ProfileView(request):
-    user=request.user
-    profile=Profile.objects.filter(User=user).first()
+    user=request.user.id
+    print(user)
+    profile=Profile.objects.filter(user=user).first()
+    if profile is None:
+        print("can't find profile")
+    else:
+        print(profile)
     task_list=TaskList.objects.filter(owner=user).first()
     countrylist=CountryList.objects.filter(owner=user).first()
     tasks=Task.objects.filter(list=task_list).annotate(
@@ -35,7 +40,7 @@ def ProfileView(request):
 @login_required
 def AlterInforamtino(request):
     user=request.user
-    profile=Profile.objects.filter(User=user).first()
+    profile=Profile.objects.filter(user=user).first()
     if request.method == 'POST':
         form=AlterProfileInformationForm(request.POST,instance=profile)
         if form.is_valid():

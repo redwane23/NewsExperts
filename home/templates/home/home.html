@@ -67,14 +67,18 @@
 
         <div class="user-information-section">
 
+            {%if profile.Picture %}
             <img src="{{ profile.Picture.url }}" class="profile_picture">
+        {% else %}
+            <img src="{% static 'Profile/images/default.png' %}" class="profile_picture">
+        {% endif %}
             <div style="z-index: 1; font-weight: bolder; margin-top: 5px;">
-                <h2> Welcome Redwane</h2>
+                <h2> Welcome {{user.username}}</h2>
             <p > name : {{user}}</p>
             {%if profile.City   %}
 
-                 <p> location : {{profile.city.name }}</p>
-                 <p> country : {{profile.city.country}}</p>
+                 <p> location : {{profile.City.name }}</p>
+                 <p> country : {{profile.City.country}}</p>
             {% else %}
             <p> location : unset</p>
             <p> location code: unset</p>

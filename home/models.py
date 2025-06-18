@@ -16,8 +16,8 @@ class Profile(models.Model):
 
 
 
-    User=models.ForeignKey(User,on_delete=models.CASCADE,related_name='profile')
-    City=models.ForeignKey(City,on_delete=models.SET_NULL,null=True,blank=True,related_name='city')
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='profile')
+    City=models.ForeignKey(City,on_delete=models.SET_NULL,null=True,blank=True,related_name='City')
     FirstName=models.CharField(max_length=100 ,blank=True)
     LastName=models.CharField(max_length=100 ,blank=True)
     Email=models.EmailField(blank=True)
@@ -28,4 +28,4 @@ class Profile(models.Model):
         default=OPTION_ONE,
     )
     def __str__(self):
-        return f"owend by {self.User}"
+        return f"owend by {self.user}"

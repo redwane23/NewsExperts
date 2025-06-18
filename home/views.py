@@ -91,8 +91,7 @@ def GetWeather(profile):
     weather={}
     api_key = config('WEATHER_API_KEY')
     if profile:
-      if profile.city:
-        city=profile.city.name if profile.City else 'London'  # Default to London if no city is set
+        city=profile.City.name if profile.City else 'London'  # Default to London if no city is set
         
         params={'key':api_key ,  'q':f"{city}"}
         params2={'key':api_key ,  'q':f"{city}",'days':1}
@@ -137,7 +136,7 @@ class home(APIView):
     
     def get_context(self):
         user=self.request.user
-        profile=Profile.objects.filter(User=user).first()
+        profile=Profile.objects.filter(user=user).first()
 
         return {
             'user':user,
@@ -159,7 +158,7 @@ class get_news(APIView):
         return page
     
     def get_context(self,request,search_term=None):
-        profile=Profile.objects.filter(User=self.request.user).first()
+        profile=Profile.objects.filter(user=self.request.user).first()
         print(profile)
         if search_term:
             news=GetNews(search_term,profile.date_of_search)
