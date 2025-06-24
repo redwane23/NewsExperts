@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from home.models import Profile
-from .models import TaskList,Task,CountryList
+from .models import TaskList,Task
 from .forms import AlterProfileInformationForm,RegisterForm,LoginForm
 from django.db.models import Case,When
 from django.contrib.auth import login,authenticate
@@ -11,14 +11,8 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def ProfileView(request):
     user=request.user.id
-    print(user)
     profile=Profile.objects.filter(user=user).first()
-    if profile is None:
-        print("can't find profile")
-    else:
-        print(profile)
     task_list=TaskList.objects.filter(owner=user).first()
-    countrylist=CountryList.objects.filter(owner=user).first()
     tasks=Task.objects.filter(list=task_list).annotate(
         preiority_order=Case(
             When(Preiorety='H', then=1),
@@ -32,7 +26,6 @@ def ProfileView(request):
         'profile':profile,
         'tasks':tasks,
         'task_list':task_list,
-        'countrylist':countrylist,
         'city':city,
     }
     return render(request,"Profile/profile.html",context)

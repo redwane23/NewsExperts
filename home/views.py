@@ -159,7 +159,6 @@ class get_news(APIView):
     
     def get_context(self,request,search_term=None):
         profile=Profile.objects.filter(user=self.request.user).first()
-        print(profile)
         if search_term:
             news=GetNews(search_term,profile.date_of_search)
         else:
