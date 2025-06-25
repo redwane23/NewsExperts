@@ -179,12 +179,3 @@ class get_news(APIView):
         search_term = request.POST.get('search_term')
         data=self.get_context(request,search_term)
         return JsonResponse(data)
-
-
-
-
-
-        
-
-
-
