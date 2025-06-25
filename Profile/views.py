@@ -94,6 +94,6 @@ def check_cities(request):
     return JsonResponse({
         'count': count,
         'first_city': str(first) if first else None,
-        'profiles':profiles,
-        'users':users,
+        'profiles':profiles.count(),
+        'users':users.count(),
     })
