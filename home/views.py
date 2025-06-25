@@ -11,8 +11,6 @@ from django.http import JsonResponse
 from .serialiezer import NewsSerializer, TopNewsSerializer , profileSerializer, userSerializer
 
 
-
-
 def GetNews(catigory,search_date):
 
     api_key=config('NEWS_API_KEY')

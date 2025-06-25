@@ -6,12 +6,19 @@ from django.db.models import Case,When
 from django.contrib.auth import login,authenticate
 from django.views import View
 from django.contrib.auth.decorators import login_required
-
+from cities_light.models import City
+from django.http import JsonResponse
 
 @login_required
 def ProfileView(request):
     user=request.user.id
+    print(user)
     profile=Profile.objects.filter(user=user).first()
+    if profile:
+        print(profile)
+    else:
+        print("no profile found")
+
     task_list=TaskList.objects.filter(owner=user).first()
     tasks=Task.objects.filter(list=task_list).annotate(
         preiority_order=Case(
@@ -20,7 +27,7 @@ def ProfileView(request):
             When(Preiorety='L', then=3)
         )
     ).order_by("preiority_order")
-    city=[profile.City.name,profile.City.latitude,profile.City.longitude]
+    city=profile.City
     context={                
         'user':user,
         'profile':profile,
@@ -78,3 +85,10 @@ class loginview(View):
                 return redirect("/profile")
         return render(request,'Profile/login.html',{'form':form})
 
+def check_cities(request):
+    count = City.objects.count()
+    first = City.objects.first()
+    return JsonResponse({
+        'count': count,
+        'first_city': str(first) if first else None
+    })
