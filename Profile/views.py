@@ -8,6 +8,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from cities_light.models import City
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 @login_required
 def ProfileView(request):
@@ -88,7 +89,11 @@ class loginview(View):
 def check_cities(request):
     count = City.objects.count()
     first = City.objects.first()
+    profiles = Profile.objects.all()
+    users = User.objects.all()
     return JsonResponse({
         'count': count,
-        'first_city': str(first) if first else None
+        'first_city': str(first) if first else None,
+        'profiles':profiles,
+        'users':users,
     })
