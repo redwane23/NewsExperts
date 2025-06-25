@@ -22,17 +22,7 @@ class TopNewsSerializer(serializers.Serializer):
         representation = super().to_representation(instance)
         # representation['pub_date'] = instance['pub_date'].isoformat() if instance['pub_date'] else None
         return representation
-# class weatherSerializer(serializers.Serializer):
-#     city = serializers.CharField(max_length=100)
-#     temperature = serializers.FloatField()
-#     description = serializers.CharField(max_length=255)  
-#     icon = serializers.CharField(max_length=100)
 
-#     def to_representation(self, instance):
-#         representation = super().to_representation(instance)
-#         representation['temperature'] = f"{instance['temperature']} °C"
-#         return representation
-    
 class profileSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=100, required=False)
     last_name = serializers.CharField(max_length=100, required=False)
