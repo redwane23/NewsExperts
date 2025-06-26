@@ -166,7 +166,9 @@
 
         function createtask(task_list_id){
             const inputValue = document.querySelector(".task-text").value
-            const apiUrl = 'http://127.0.0.1:8000/api/createtask/';
+
+
+            const apiUrl = `${window.location.origin}/api/createtask/`;
 
             const data = {
             text: inputValue,
@@ -201,11 +203,12 @@
             }
 
             function deletetask(task_id){
-                const apiUrl = 'http://127.0.0.1:8000/api/taskdatails/' +task_id;
+                const apiUrl = `${window.location.origin}/api/taskdatails/${task_id}`;
                 const requestOptions = {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
                 },
                 };
 
@@ -225,11 +228,12 @@
                 });
             }
             function resettasks(task_list_id){
-                const apiUrl = 'http://127.0.0.1:8000/api/resettasks/?list='+task_list_id;
+                const apiUrl = `${window.location.origin}/api/resettasks/?list=${task_list_id}`;
                 const requestOptions = {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
                 },
                 };
 
@@ -253,7 +257,7 @@
                 const val=current_status.trim().toLowerCase()
                 const value = (val === 'true'); //pars the string to boolien
 
-                const apiUrl = 'http://127.0.0.1:8000/api/taskdatails/'+task_id;
+                const apiUrl = `${window.location.origin}/api/taskdatails/${task_id}`;
                 const data={
                     status : !value
                 };
@@ -262,6 +266,7 @@
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
                 },
                 body: JSON.stringify(data)
                 };
@@ -287,7 +292,7 @@
             function updatetask(element){
                 const task_id=element.getAttribute("data-task-id")
                 const newtext=element.innerText;
-                const apiUrl = 'http://127.0.0.1:8000/api/taskdatails/'+task_id;
+                const apiUrl = `${window.location.origin}/api/taskdatails/${task_id}`;
                 const data={
                     text : newtext
                 };
@@ -296,6 +301,7 @@
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
                 },
                 body: JSON.stringify(data)
                 };
@@ -318,38 +324,6 @@
                 });
             }
     </script>
-    <script >  
-const HOURHAND = document.querySelectorAll("#hour");
-const MINUTEHAND = document.querySelectorAll("#minute");
-
-const SECONDHAND = document.querySelectorAll("#second");
-
-var date = new Date();
-let hr = date.getHours();
-let min = date.getMinutes();
-let sec = date.getSeconds();
-
-let hrPosition = ((hr+1)*360/12) + (min*(360/60)/12);
-let minPosition = (min*360/60 )+ (sec*(360/60)/60);
-let secPosition = sec*360/60;
-
-function runThetime() {
-	hrPosition = hrPosition+(3/360);
-    minPosition = minPosition+(6/60);
-    secPosition = secPosition+(6);
-    for (const hour of HOURHAND) {
-        hour.style.transform = "rotate(" + hrPosition + "deg)";
-    }
-    for (const minut of MINUTEHAND) {
-        minut.style.transform = "rotate(" + minPosition + "deg)";
-    }
-    for (const second of SECONDHAND) {
-        second.style.transform = "rotate(" + secPosition + "deg)";
-    }
-}
-
-var interval = setInterval(runThetime, 1000);
-        </script>
 </body>
 
 </html>
