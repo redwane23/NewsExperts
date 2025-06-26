@@ -64,12 +64,12 @@ WSGI_APPLICATION = 'news.wsgi.application'
 
 
 
- DATABASES = {
+DATABASES = {
      'default': dj_database_url.config(
          default='postgresql://redwane:mKcDplSkHavcUqV4eTxDNQfTelEl6i6H@dpg-d166cojuibrs73bd0130-a/newsexperts',
          conn_max_age=600
      )
- }
+}
 
 
 #DATABASES = {
