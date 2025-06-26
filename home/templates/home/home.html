@@ -165,7 +165,7 @@
 
     function get_news() {
         $page += 1;
-        fetch('http://127.0.0.1:8000/home/get_news/?page=' + $page, {
+        fetch(`${window.location.origin}/home/get_news/?page=${$page}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',

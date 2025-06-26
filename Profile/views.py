@@ -13,12 +13,7 @@ from django.contrib.auth.models import User
 @login_required
 def ProfileView(request):
     user=request.user.id
-    print(user)
     profile=Profile.objects.filter(user=user).first()
-    if profile:
-        print(profile)
-    else:
-        print("no profile found")
 
     task_list=TaskList.objects.filter(owner=user).first()
     tasks=Task.objects.filter(list=task_list).annotate(
@@ -86,14 +81,3 @@ class loginview(View):
                 return redirect("/profile")
         return render(request,'Profile/login.html',{'form':form})
 
-def check_cities(request):
-    count = City.objects.count()
-    first = City.objects.first()
-    profiles = Profile.objects.all()
-    users = User.objects.all()
-    return JsonResponse({
-        'count': count,
-        'first_city': str(first) if first else None,
-        'profiles':profiles.count(),
-        'users':users.count(),
-    })
