@@ -1,17 +1,16 @@
-
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# SECRET_KEY = 'django-insecure-a74oz2lxi&zzy$eme!z+wzuh)3g4ylmvd#t8@1$*z_o^pqu=&v'
+
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'True') == 'False'
 import dj_database_url
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["newsexperts.onrender.com"]
 
 
 # Application definition
@@ -64,12 +63,11 @@ WSGI_APPLICATION = 'news.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:postgres@localhost:5432/newsexperts',
-        conn_max_age=600
-    )
+      'default': dj_database_url.config(
+          default='postgresql://redwane:mKcDplSkHavcUqV4eTxDNQfTelEl6i6H@dpg-d166cojuibrs73bd0130-a/newsexperts',
+          conn_max_age=600
+      )
 }
-
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -101,9 +99,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -115,10 +111,11 @@ LOGIN_REDIRECT_URL='profile'
 LOGOUT_REDIRECT_URL='/profile/login'
 LOGIN_URL = '/profile/login/'
 
-if not DEBUG:
+STATIC_URL = '/static/'
 
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
