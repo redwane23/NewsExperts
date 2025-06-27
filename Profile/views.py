@@ -6,9 +6,6 @@ from django.db.models import Case,When
 from django.contrib.auth import login,authenticate
 from django.views import View
 from django.contrib.auth.decorators import login_required
-from cities_light.models import City
-from django.http import JsonResponse
-from django.contrib.auth.models import User
 
 @login_required
 def ProfileView(request):

@@ -9,8 +9,10 @@ from django.shortcuts import render
 from rest_framework.pagination import PageNumberPagination
 from django.http import JsonResponse
 from .serialiezer import NewsSerializer, TopNewsSerializer , profileSerializer, userSerializer
+import logging
+from news import settings
 
-
+logger = logging.getLogger(__name__)
 def GetNews(catigory,search_date):
 
     api_key=config('NEWS_API_KEY')
@@ -46,8 +48,14 @@ def GetNews(catigory,search_date):
                 news_list.append(the_news)
 
     else:
-        print('faild to load content 1')
-        print(response.status_code)
+        logger.error(f"News API Error: Status {response.status_code} - {response.text}")
+
+        if settings.DEBUG:
+            return JsonResponse({'error': 'Failed to fetch news', 'status': response.status_code, 'detail': response.text})
+        else:
+            return JsonResponse({'error': 'Unable to load news at the moment'}, status=503)
+        
+     
 
     return news_list
     
@@ -76,8 +84,13 @@ def GetTopNews():
                     }
                 top_news_list.append(the_news)
     else:
-        print('faild to load content 2')
-        print(response.status_code)
+        logger.error(f"News API Error: Status {response.status_code} - {response.text}")
+
+        if settings.DEBUG:
+            return JsonResponse({'error': 'Failed to fetch news', 'status': response.status_code, 'detail': response.text})
+        else:
+            return JsonResponse({'error': 'Unable to load news at the moment'}, status=503)
+        
 
     
 
@@ -89,7 +102,7 @@ def GetWeather(profile):
     weather={}
     api_key = config('WEATHER_API_KEY')
     if profile:
-        city=profile.City.name if profile.City else 'London'  # Default to London if no city is set
+        city=profile.City.name if profile.City else 'London'  
         
         params={'key':api_key ,  'q':f"{city}"}
         params2={'key':api_key ,  'q':f"{city}",'days':1}
@@ -125,10 +138,16 @@ def GetWeather(profile):
         }
         weather={'current':current,'forecast':forecast}
     else:
-        print("no profile found")
+        logger.error(f"Weather API Error: Status {response.status_code} - {response.text}")
+
+        if settings.DEBUG:
+            return JsonResponse({'error': 'Failed to fetch weather', 'status': response.status_code, 'detail': response.text})
+        else:
+            return JsonResponse({'error': 'Unable to load weather at the moment'}, status=503)
+        
     return weather
 
-
+@login_required
 class home(APIView):
     template_name = 'home/home.html'
     
@@ -147,7 +166,7 @@ class home(APIView):
         context = self.get_context()
         return render(request, self.template_name, context)
     
-
+@login_required
 class get_news(APIView):
     def paginate_news(self, request, news_list):
         paginator = PageNumberPagination()

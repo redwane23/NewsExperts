@@ -71,8 +71,7 @@ def getcity(request,lat,lng):
 
     data={
         'status':'failed',
-        'city_id':0,
-        'city_name':'No city found within the 100km distance.'
+        'message':'No city found within the 100km distance.'
     }
     return  JsonResponse(data)
                 
