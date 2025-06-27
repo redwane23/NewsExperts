@@ -1,21 +1,27 @@
-from cProfile import label
 from django import forms
 from home.models import Profile
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
+from cities_light.models import City
 
 class AlterProfileInformationForm(forms.ModelForm):
+    City = forms.IntegerField(widget=forms.HiddenInput())
     class Meta:
         model=Profile
         fields=["City","FirstName","LastName","Email","Picture","date_of_search"]
         Widgets={
-            'City':forms.Select(attrs={'class':'form-control'}),
             'FirstName':forms.TextInput(attrs={'class':'form-control','label':'First Name'}),
             'LastName':forms.TextInput(attrs={'class':'form-control','label':'Last Name'}),
             'Email':forms.EmailInput(attrs={'class':'form-control','label':'email'}),
             'Picture':forms.FileInput(attrs={'class':'form-control'}),
             'date_of_search':forms.TextInput(attrs={'class':'form-control','label':'Search Time'}),
         }
+    
+    def clean_City(self):
+        city_id = self.cleaned_data['City']
+        try:
+            return City.objects.get(pk=city_id)
+        except City.DoesNotExist:
+            raise forms.ValidationError("Invalid city ID.")
 
 class RegisterForm(forms.ModelForm):
     password=forms.CharField(widget=forms.PasswordInput, label='Password')

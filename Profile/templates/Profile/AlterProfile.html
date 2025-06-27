@@ -18,7 +18,11 @@
         <div class="input-section"> 
             {% csrf_token %}
             {{ from.as_p }}
-            <button type="submit"> done </button>
+            <p>
+                <label for="id_city_name">City choosen:</label>
+                <input type="text" id="city_name"  placeholder="Select a city by clicking on the map" style="width: 300px;">
+            </p>
+            <button type="submit"> submit </button>
         </div>
     </form>
     <button type="button" class="btnGetLoc" id="btnGetLoc"> Find My Location </button>
@@ -63,7 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.json();
     })
     .then(data => {
-        document.getElementById('id_City').value=data.city
+        console.log(data.city)
+        document.getElementById('id_City').value=data.city.id
+        document.getElementById('city_name').value=data.city.name+ ','+ data.city.region_name + ', ' + data.city.country_name
     })
     .catch(error => {
         console.error

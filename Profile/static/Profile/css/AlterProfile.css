@@ -1,15 +1,16 @@
 body{
     background-color:#e3f3ff !important;
 }
-form select{
-    max-width:70%;
-}
+
 form{
     margin: 5% 25%;
     width:49%;
     border-radius: 15px;
     background-color: white ;
     overflow: hidden;
+}
+#city_name{
+    width: 300px;
 }
 .upper-section{
     background-color: black ;

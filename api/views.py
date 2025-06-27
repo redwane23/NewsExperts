@@ -1,6 +1,6 @@
 from rest_framework import generics
 from Profile.models import TaskList,Task
-from .serializers import TaskListSerializers,TaskSerializers
+from .serializers import TaskListSerializers,TaskSerializers,CitySerializers
 from rest_framework.response import Response
 import math
 from geopy.distance import geodesic
@@ -61,17 +61,18 @@ def getcity(request,lat,lng):
             city_coords = (city.latitude,city.longitude)
             distance = geodesic((lat,lng),city_coords).kilometers
             if distance<min_dist:
-                nearest_city=city
+                nearest_city=CitySerializers(city).data
                 min_dist=distance
         data={
             'status':'success',
-            'city':nearest_city.id,
+            'city':nearest_city,
         }
         return JsonResponse(data)
 
     data={
         'status':'failed',
-        'city':0,
+        'city_id':0,
+        'city_name':'No city found within the 100km distance.'
     }
     return  JsonResponse(data)
                 

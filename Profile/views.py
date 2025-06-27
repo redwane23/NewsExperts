@@ -12,9 +12,8 @@ from django.contrib.auth.models import User
 
 @login_required
 def ProfileView(request):
-    user=request.user.id
+    user=request.user
     profile=Profile.objects.filter(user=user).first()
-
     task_list=TaskList.objects.filter(owner=user).first()
     tasks=Task.objects.filter(list=task_list).annotate(
         preiority_order=Case(
@@ -40,11 +39,10 @@ def AlterInforamtino(request):
     if request.method == 'POST':
         form=AlterProfileInformationForm(request.POST,instance=profile)
         if form.is_valid():
-            print("valid")
             form.save()
             return redirect('profile')
         else: 
-            print('not valid')
+            print(form.errors)
             return redirect('alter')
     else:
         form=AlterProfileInformationForm(instance=profile)
@@ -80,4 +78,3 @@ class loginview(View):
                 login(request,user)
                 return redirect("/profile")
         return render(request,'Profile/login.html',{'form':form})
-
