@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'Profile.apps.ProfileConfig',
     'api.apps.ApiConfig',
-    'dal_select2',
 ]
 
 MIDDLEWARE = [
