@@ -65,20 +65,20 @@ WSGI_APPLICATION = 'news.wsgi.application'
 
 
 
-# DATABASES = {
-#      'default': dj_database_url.config(
-#          default='postgresql://redwane:mKcDplSkHavcUqV4eTxDNQfTelEl6i6H@dpg-d166cojuibrs73bd0130-a/newsexperts',
-#          conn_max_age=600
-#      )
-# }
-
-
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.sqlite3',
-       'NAME': BASE_DIR / 'db.sqlite3',
-   }
+      'default': dj_database_url.config(
+          default='postgresql://redwane:mKcDplSkHavcUqV4eTxDNQfTelEl6i6H@dpg-d166cojuibrs73bd0130-a/newsexperts',
+          conn_max_age=600
+      )
 }
+
+
+#DATABASES = {
+#   'default': {
+#       'ENGINE': 'django.db.backends.sqlite3',
+#       'NAME': BASE_DIR / 'db.sqlite3',
+#   }
+#}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
