@@ -1,14 +1,13 @@
 from django.shortcuts import render 
 from .models import Profile
 import requests
-from django.contrib.auth.decorators import login_required
 from decouple import config
 import datetime
 from rest_framework.views import APIView
 from django.shortcuts import render
 from rest_framework.pagination import PageNumberPagination
 from django.http import JsonResponse
-from .serialiezer import NewsSerializer, TopNewsSerializer , profileSerializer, userSerializer
+from .serialiezer import NewsSerializer
 import logging
 from news import settings
 
@@ -143,11 +142,11 @@ def GetWeather(profile):
         if settings.DEBUG:
             return JsonResponse({'error': 'Failed to fetch weather', 'status': response.status_code, 'detail': response.text})
         else:
-            return JsonResponse({'error': 'Unable to load weather at the moment'}, status=503)
+            return JsonResponse({'error': 'Unable to load weathe at the moment'}, status=503)
         
     return weather
 
-@login_required
+
 class home(APIView):
     template_name = 'home/home.html'
     
@@ -166,7 +165,7 @@ class home(APIView):
         context = self.get_context()
         return render(request, self.template_name, context)
     
-@login_required
+
 class get_news(APIView):
     def paginate_news(self, request, news_list):
         paginator = PageNumberPagination()
