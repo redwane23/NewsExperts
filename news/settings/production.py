@@ -1,13 +1,17 @@
+from .base import *
 from pathlib import Path
 import os
 
 
-SECRET_KEY='django-insecure-a74oz2lxi&zzy$eme!z+wzuh)3g4ylmvd#t8@1$*z_o^pqu=&v'
 DEBUG = False
 
 ALLOWED_HOSTS = ["newsexperts.onrender.com"]
-
-SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.environ.get('DEBUG', 'True') == 'False'
+DEBUG ='False'
 import dj_database_url
 
+DATABASES = {
+      'default': dj_database_url.config(
+          default='postgresql://redwane:mKcDplSkHavcUqV4eTxDNQfTelEl6i6H@dpg-d166cojuibrs73bd0130-a/newsexperts',
+          conn_max_age=600
+      )
+}
