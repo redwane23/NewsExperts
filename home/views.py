@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from .serialiezer import NewsSerializer
 import logging
 from news import settings
+import json
 
 logger = logging.getLogger(__name__)
 def GetNews(catigory,search_date):
@@ -192,6 +193,10 @@ class get_news(APIView):
         
         
     def post(self,request):
-        search_term = request.POST.get('search_term')
-        data=self.get_context(request,search_term)
+        search_term = request.data.get("search")
+        print(request.data)
+        print(f"Search term received: {search_term}")  # Debugging output
+
+        # Pass the search term directly to get_context
+        data = self.get_context(request, search_term)
         return JsonResponse(data)

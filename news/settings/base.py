@@ -1,16 +1,16 @@
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.environ.get('DEBUG', 'True') == 'False'
-import dj_database_url
 
-ALLOWED_HOSTS = ["newsexperts.onrender.com"]
+
+
+
 
 
 # Application definition
@@ -60,14 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'news.wsgi.application'
 
-
-
-DATABASES = {
-      'default': dj_database_url.config(
-          default='postgresql://redwane:mKcDplSkHavcUqV4eTxDNQfTelEl6i6H@dpg-d166cojuibrs73bd0130-a/newsexperts',
-          conn_max_age=600
-      )
-}
 
 
 AUTH_PASSWORD_VALIDATORS = [

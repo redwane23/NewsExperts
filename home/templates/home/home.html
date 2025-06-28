@@ -14,7 +14,7 @@
 
                     <div class="navbar-header">
                         <button class="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                        <a href="/home/world" class="navbar-brand">NewsExperst.COM</a>
+                        <a href="/home/" class="navbar-brand">NewsExperst.COM</a>
                     </div>
 
                     <div class="navbar-collapse collapse" id="mobile_menu">
@@ -35,15 +35,12 @@
                         </ul>
                         <ul class="nav navbar-nav">
                             <li>
-                                <form method="post" action="/home/get_news/" class="navbar-form">
-                                    {% csrf_token%}
                                     <div class="form-group" >
                                         <div class="input-group">
-                                            <input type="search" name="search_term"  placeholder="Search Anything Here..." class="form-control">
+                                            <input type="search" placeholder="Search Anything Here..." class="form-control" id="search">
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
                                         </div>
                                     </div>
-                                </form>
                             </li>
                         </ul>
 
@@ -157,7 +154,7 @@
 <script>
 
     $page=1;
-
+    const searchInput = document.getElementById('search');
 
     get_news();
     
@@ -199,6 +196,45 @@
         console.log("Load more news clicked");
     }
 
+    searchInput.addEventListener('search', function(event) {
+        event.preventDefault();
+        const query = searchInput.value.trim();
+        const formData = new FormData();
+        formData.append('search', query);
+        if (query) {
+            console.log("Search query:", query);
+
+            fetch(`${window.location.origin}/home/get_news/`, {
+                method: 'POST',
+                headers: {
+                    // 'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body:formData,
+            })
+
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.headlines').innerHTML = '';
+                data.serialized_news.forEach((new_item) => {
+                    const article = document.createElement('div');
+                    article.className = 'articale';
+                    article.innerHTML = `
+                        <img src="${new_item.image}" class="news-image">
+                        <div>
+                            <a href="${new_item.url}" class="news-title">${new_item.headline}</a>
+                            <p class="news-summary">${new_item.text}</p>
+                            <p class="pub-date">${new_item.pub_date}</p>
+                        </div>
+                    `;
+                    document.querySelector('.headlines').appendChild(article);
+
+                }); 
+
+            })
+            .catch(error => console.error('Search error:', error));
+        }
+    });
 
     
 </script>
