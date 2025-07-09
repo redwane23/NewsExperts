@@ -82,7 +82,7 @@
             <p> location : unset</p>
             <p> location code: unset</p>
             {% endif %}
-            <button> edit </button>
+            <button> <a href="/profile/alter">edit</a> </button>
             </div>
         </div>
         <div class="weather-information-section">
@@ -106,7 +106,7 @@
                         will it rain: {% if weather.forecast.rain is 0 %}
                             No
                         {%else%}
-                            yess
+                            yes
                         {%endif%}
                     </p>
                 </div>
