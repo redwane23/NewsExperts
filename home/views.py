@@ -11,6 +11,7 @@ from .serialiezer import NewsSerializer
 import logging
 from news import settings
 import json
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 logger = logging.getLogger(__name__)
 def GetNews(catigory,search_date):
@@ -148,7 +149,7 @@ def GetWeather(profile):
     return weather
 
 
-class home(APIView):
+class home(LoginRequiredMixin,APIView):
     template_name = 'home/home.html'
     
     def get_context(self):
