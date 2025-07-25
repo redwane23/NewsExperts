@@ -1,12 +1,17 @@
 body{
   background-color: whitesmoke !important;
 }
-.profile-section{
-    display:flex;
+
+.profile-section {
     margin: 5vh 15vw;
     justify-content: space-around;
-    background-color: palegreen;
+    border-radius: 5px;
+    border: 1px solid;
   }
+.profile-infor{
+  display: flex;
+  justify-content: space-around;
+}
 
 .profile_picture{
     width: 60px;

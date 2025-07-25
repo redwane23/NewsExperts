@@ -67,13 +67,15 @@
         </div>
     </div>
     
-    <div class="profile-section"> 
+    <div class="profile-section">
+        <p class="heading">profile</p>
+        <div class="profile-infor"> 
         {%if profile.Picture %}
             <img src="{{ profile.Picture.url }}" class="profile_picture">
         {% else %}
             <img src="{% static 'Profile/images/default.png' %}" class="profile_picture">
         {% endif %}
-        <div style="z-index: 1; font-weight: bolder; margin-top: 5px;">
+        <div style="z-index: 1; font-weight: bolder; margin-top: 5px;border-right: 1px soli;">
             <p > name : {{user}}</p>
             {%if profile.City  %}
 
@@ -91,6 +93,7 @@
 
         </div>
         <a href="alter" class="alter-button" style="text-decoration: none;"> alter information </a>
+        </div>
     </div>
 
 
