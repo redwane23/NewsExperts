@@ -24,12 +24,35 @@ class AlterProfileInformationForm(forms.ModelForm):
             raise forms.ValidationError("Invalid city ID.")
 
 class RegisterForm(forms.ModelForm):
-    password=forms.CharField(widget=forms.PasswordInput, label='Password')
-    password_confirmation=forms.CharField(widget=forms.PasswordInput, label='Password Confirmation')
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'input'}),
+        label='Password'
+    )
+    password_confirmation = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'input'}),
+        label='Password Confirmation'
+    )
+
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'input'}),
+        label='Username'
+    )
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'input'}),
+        label='First Name'
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'input'}),
+        label='Last Name'
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'input'}),
+        label='Email'
+    )
     class Meta:
         model=User
         fields=['username','password','first_name','last_name','email']
-        def clean_password_confirmation(self):
+    def clean_password_confirmation(self):
             password=self.cleaned_data.get('password')
             password2=self.cleaned_data.get('password_confirmation')
             if password !=password2:

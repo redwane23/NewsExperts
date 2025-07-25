@@ -1,0 +1,33 @@
+body{
+    background-color:#e3f3ff !important;
+}
+
+form{
+    margin: 5% 25%;
+    width:49%;
+    border-radius: 15px;
+    background-color: white ;
+    overflow: hidden;
+}
+.upper-section{
+    background-color: black ;
+}
+.input-section{
+    padding: 2%;
+    padding-left: 15%;
+}
+label{
+    width: 27%;
+    display: block;
+}
+.upper-text{
+    color:  white;
+    text-align: center;
+    font-size:1.5rem;
+    font-weight:600;
+}
+
+label[for="Picture-clear_id"],#Picture-clear_id{ 
+    position:fixed;
+    left: 6000px;
+}
