@@ -31,3 +31,8 @@ label[for="Picture-clear_id"],#Picture-clear_id{
     position:fixed;
     left: 6000px;
 }
+a{
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 20px;
+}

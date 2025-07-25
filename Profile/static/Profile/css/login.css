@@ -31,3 +31,11 @@ label{
     font-weight:600;
     margin: 0;
 }
+a{
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 20px;
+}
+a{
+    font-family: sans-serif;
+}
