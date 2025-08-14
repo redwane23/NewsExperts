@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import  timedelta,date
 from cities_light.models import Country
-from django.utils import timezone
-import pytz
 
 
 class TaskList(models.Model):
@@ -31,6 +29,11 @@ class Task(models.Model):
         )
     class Meta:
         ordering= ['Preiorety']
+    def auto_delete(self):
+        if self.deadline < date.today():
+            self.delete()
+        if self.status:
+            self.delete()
 
     def __str__(self):
         return f"{self.text[0:15]}..." 

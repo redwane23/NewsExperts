@@ -6,4 +6,7 @@ class HomeConfig(AppConfig):
     def ready(self):
         # Implicitly connect signal handlers decorated with @receiver.
         from . import signals
+        from .cron import refresh_news_cache
+        # Run immediately when server starts
+        refresh_news_cache()
 

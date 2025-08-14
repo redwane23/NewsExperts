@@ -9,23 +9,21 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def ProfileView(request):
-    user=request.user
-    profile=Profile.objects.filter(user=user).first()
-    task_list=TaskList.objects.filter(owner=user).first()
-    tasks=Task.objects.filter(list=task_list).annotate(
+    user_id=request.user.id
+    profile=Profile.objects.filter(user=user_id).first()
+    task_list=TaskList.objects.filter(owner=user_id).first()
+    tasks=task_list.task_set.all().annotate(
         preiority_order=Case(
             When(Preiorety='H', then=1),
-            When(Preiorety='M', then=2),
+            When(Preiorety='M', then=2),    
             When(Preiorety='L', then=3)
         )
     ).order_by("preiority_order")
-    city=profile.City
     context={                
-        'user':user,
+        'user':request.user.username,
         'profile':profile,
         'tasks':tasks,
         'task_list':task_list,
-        'city':city,
     }
     return render(request,"Profile/profile.html",context)
 

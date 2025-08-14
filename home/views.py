@@ -10,142 +10,162 @@ from django.http import JsonResponse
 from .serialiezer import NewsSerializer
 import logging
 from news import settings
-import json
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
-def GetNews(catigory,search_date):
 
-    api_key=config('NEWS_API_KEY')
-    base_url_articals='https://newsapi.org/v2/everything'
+def GetNews(catigory,search_date):
 
     if search_date == 'yesterday':
         date=datetime.date.today() - datetime.timedelta(days=1)
+        cache_key = f"news_{catigory}_{1}"
     elif search_date == 'last week':
         date=datetime.date.today() - datetime.timedelta(days=7) 
+        cache_key = f"news_{catigory}_{2}"
     elif search_date == 'last mounth':
         date=datetime.date.today() - datetime.timedelta(days=30)
+        cache_key = f"news_{catigory}_{3}"
 
-    params={'q': catigory,'from':date,'sortBy':'popularity',"apiKey":api_key}
+    data = cache.get(cache_key)
 
-
-    response=requests.get(base_url_articals,params=params)
-
-
-    news_list=[]
-    if response.status_code ==200:
-        data=response.json()
-        for  artical in data['articles']:
-            image = artical.get('urlToImage')
-            url = artical.get('url')
-            if image and url:
-                the_news={
-                    'headline': artical['title'],
-                    'text': artical['description'],
-                    'image':image,
-                    'pub_date':artical["publishedAt"],
-                    'url':url,
-                    }
-                news_list.append(the_news)
-
+    if data:
+        return data
     else:
-        logger.error(f"News API Error: Status {response.status_code} - {response.text}")
+        api_key=config('NEWS_API_KEY')
+        base_url_articals='https://newsapi.org/v2/everything'
 
-        if settings.DEBUG:
-            return JsonResponse({'error': 'Failed to fetch news', 'status': response.status_code, 'detail': response.text})
-        else:
-            return JsonResponse({'error': 'Unable to load news at the moment'}, status=503)
-        
-     
+        if search_date == 'yesterday':
+            date=datetime.date.today() - datetime.timedelta(days=1)
+        elif search_date == 'last week':
+            date=datetime.date.today() - datetime.timedelta(days=7) 
+        elif search_date == 'last mounth':
+            date=datetime.date.today() - datetime.timedelta(days=30)
 
-    return news_list
-    
-def GetTopNews():
-    base_url_top_news='https://newsapi.org/v2/top-headlines'
-    api_key=config('NEWS_API_KEY')
-    params={
-        'country':'us',
-        'apiKey':api_key
-    }
-    response=requests.get(base_url_top_news,params=params)
-    top_news_list=[]
-
-    if response.status_code ==200:
-        data=response.json()
-        for  artical in data['articles']:
-            image = artical.get('urlToImage')
-            url = artical.get('url')
-            if image and url:
-                the_news={
-                    'headline': artical['title'],
-                    'text': artical['description'],
-                    'image':image,
-                    'pub_date':artical["publishedAt"],
-                    'url':url,
-                    }
-                top_news_list.append(the_news)
-    else:
-        logger.error(f"News API Error: Status {response.status_code} - {response.text}")
-
-        if settings.DEBUG:
-            return JsonResponse({'error': 'Failed to fetch news', 'status': response.status_code, 'detail': response.text})
-        else:
-            return JsonResponse({'error': 'Unable to load news at the moment'}, status=503)
-        
-
-    
-
-    return top_news_list
-
-def GetWeather(profile):
-    current_url= "http://api.weatherapi.com/v1/current.json"
-    forecast_url = "http://api.weatherapi.com/v1/forecast.json"
-    weather={}
-    api_key = config('WEATHER_API_KEY')
-    if profile:
-        city=profile.City.name if profile.City else 'London'  
-        
-        params={'key':api_key ,  'q':f"{city}"}
-        params2={'key':api_key ,  'q':f"{city}",'days':1}
-
-        response=requests.get(current_url, params=params)
-        response2=requests.get(forecast_url,params=params2 )
-
-        current={}
-        forecast={}
+        params={'q': catigory,'from':date,'sortBy':'popularity',"apiKey":api_key}
+        response=requests.get(base_url_articals,params=params)
+        news_list=[]
 
         if response.status_code ==200:
             data=response.json()
+            for  artical in data['articles']:
+                image = artical.get('urlToImage')
+                url = artical.get('url')
+                if image and url:
+                    the_news={
+                        'headline': artical['title'],
+                        'text': artical['description'],
+                        'image':image,
+                        'pub_date':artical["publishedAt"],
+                        'url':url,
+                        }
+                    news_list.append(the_news)
 
-            current={
-                'tempeture':data['current']['temp_c'],
-                'description':data['current']['condition']['text'],
-                'wind_kph':data['current']['wind_kph'],
-                'humidity':data['current']['humidity'],
-                'icon':data['current']['condition']['icon'],
-                'location':data['location']["region"]
-            }
-
-        if response2.status_code == 200:
-            data2=response2.json()
-            forecast={
-                'max_temp':data2['forecast']['forecastday'][0]['day']['maxtemp_c'],
-                'min_temp':data2['forecast']['forecastday'][0]['day']['mintemp_c'],
-                'avg_temp':data2['forecast']['forecastday'][0]['day']['avgtemp_c'],
-                'humidity':data2['forecast']['forecastday'][0]['day']['avghumidity'],
-                'rain':data2['forecast']['forecastday'][0]['day']['daily_will_it_rain'],
-                'description':data2['forecast']['forecastday'][0]['day']['condition']['text'],
-                'icon':data2['forecast']['forecastday'][0]['day']['condition']['icon'],
-        }
-        weather={'current':current,'forecast':forecast}
-    else:
-        logger.error(f"Weather API Error: Status {response.status_code} - {response.text}")
-
-        if settings.DEBUG:
-            return JsonResponse({'error': 'Failed to fetch weather', 'status': response.status_code, 'detail': response.text})
         else:
-            return JsonResponse({'error': 'Unable to load weathe at the moment'}, status=503)
-        
+            logger.error(f"News API Error: Status {response.status_code} - {response.text}")
+
+            if settings.DEBUG:
+                return JsonResponse({'error': 'Failed to fetch news', 'status': response.status_code, 'detail': response.text})
+            else:
+                return JsonResponse({'error': 'Unable to load news at the moment'}, status=503)
+        cache.set(cache_key, news_list, timeout=60 * 60)  
+        return news_list
+    
+def GetTopNews():
+    cache_key = "top_news"
+    data = cache.get(cache_key)
+
+    if data:
+        return data
+    else:
+        base_url_top_news='https://newsapi.org/v2/top-headlines'
+        api_key=config('NEWS_API_KEY')
+        params={
+            'country':'us',
+            'apiKey':api_key
+        }
+        response=requests.get(base_url_top_news,params=params)
+        top_news_list=[]
+
+        if response.status_code ==200:
+            data=response.json()
+            for  artical in data['articles']:
+                image = artical.get('urlToImage')
+                url = artical.get('url')
+                if image and url:
+                    the_news={
+                        'headline': artical['title'],
+                        'text': artical['description'],
+                        'image':image,
+                        'pub_date':artical["publishedAt"],
+                        'url':url,
+                        }
+                    top_news_list.append(the_news)
+        else:
+            logger.error(f"News API Error: Status {response.status_code} - {response.text}")
+
+            if settings.DEBUG:
+                return JsonResponse({'error': 'Failed to fetch news', 'status': response.status_code, 'detail': response.text})
+            else:
+                return JsonResponse({'error': 'Unable to load news at the moment'}, status=503)
+        cache.set(cache_key, top_news_list, timeout=60 * 60)  
+        return top_news_list
+
+def GetWeather(profile):
+    cache_key = "weather"
+    data = cache.get(cache_key)
+
+    if data:
+        return data
+    else:
+        current_url= "http://api.weatherapi.com/v1/current.json"
+        forecast_url = "http://api.weatherapi.com/v1/forecast.json"
+        weather={}
+        api_key = config('WEATHER_API_KEY')
+        if profile:
+            city=profile.City.name if profile.City else 'London'  
+            
+            params={'key':api_key ,  'q':f"{city}"}
+            params2={'key':api_key ,  'q':f"{city}",'days':1}
+
+            response=requests.get(current_url, params=params)
+            response2=requests.get(forecast_url,params=params2 )
+
+            current={}
+            forecast={}
+
+            if response.status_code ==200:
+                data=response.json()
+
+                current={
+                    'tempeture':data['current']['temp_c'],
+                    'description':data['current']['condition']['text'],
+                    'wind_kph':data['current']['wind_kph'],
+                    'humidity':data['current']['humidity'],
+                    'icon':data['current']['condition']['icon'],
+                    'location':data['location']["region"]
+                }
+
+            if response2.status_code == 200:
+                data2=response2.json()
+                forecast={
+                    'max_temp':data2['forecast']['forecastday'][0]['day']['maxtemp_c'],
+                    'min_temp':data2['forecast']['forecastday'][0]['day']['mintemp_c'],
+                    'avg_temp':data2['forecast']['forecastday'][0]['day']['avgtemp_c'],
+                    'humidity':data2['forecast']['forecastday'][0]['day']['avghumidity'],
+                    'rain':data2['forecast']['forecastday'][0]['day']['daily_will_it_rain'],
+                    'description':data2['forecast']['forecastday'][0]['day']['condition']['text'],
+                    'icon':data2['forecast']['forecastday'][0]['day']['condition']['icon'],
+            }
+            weather={'current':current,'forecast':forecast}
+        else:
+            logger.error(f"Weather API Error: Status {response.status_code} - {response.text}")
+
+            if settings.DEBUG:
+                return JsonResponse({'error': 'Failed to fetch weather', 'status': response.status_code, 'detail': response.text})
+            else:
+                return JsonResponse({'error': 'Unable to load weathe at the moment'}, status=503)
+    cache.set(cache_key, weather, timeout=60 * 60)  
     return weather
 
 

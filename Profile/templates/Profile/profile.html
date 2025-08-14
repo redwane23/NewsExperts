@@ -78,9 +78,7 @@
         <div style="z-index: 1; font-weight: bolder; margin-top: 5px;border-right: 1px soli;">
             <p > name : {{user}}</p>
             {%if profile.City  %}
-
                 <p> location : {{profile.City.country}}</p>
-
             {% else %}
             <p> locateion : unset </p>
             {% endif %}
@@ -131,6 +129,13 @@
           <label for="text"><b>Text</b></label>
           <input type="text" placeholder="Enter text ..." required class="task-text">
       
+          <label for="priority">Select Priority:</label>
+          <select name="priority" id="priority">
+            <option value="L" style="color: green;">🟢 Low</option>
+            <option value="M" style="color: orange;">🟠 Medium</option>
+            <option value="H" style="color: red;">🔴 High</option>
+          </select>
+
           <button class="btn" onclick="createtask('{{task_list.id}}')">add</button>
           <button type="button" class="btn cancel" onclick="hideForm()">Close</button>
 
@@ -169,12 +174,13 @@
 
         function createtask(task_list_id){
             const inputValue = document.querySelector(".task-text").value
-
+            const priority = document.querySelector("#priority").value;
 
             const apiUrl = `${window.location.origin}/api/createtask/`;
 
             const data = {
             text: inputValue,
+            Preiorety: priority,
             list: task_list_id,
             };
 

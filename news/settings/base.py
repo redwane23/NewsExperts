@@ -17,6 +17,9 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'Profile.apps.ProfileConfig',
     'api.apps.ApiConfig',
+    'debug_toolbar',
+    'silk',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -28,6 +31,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'silk.middleware.SilkyMiddleware'
 ]
 
 ROOT_URLCONF = 'news.urls'
