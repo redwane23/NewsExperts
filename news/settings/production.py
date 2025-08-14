@@ -15,3 +15,9 @@ DATABASES = {
           conn_max_age=600
       )
 }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "default",
+    }
+}
